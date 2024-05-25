@@ -1,23 +1,8 @@
 from pyamaze import maze, COLOR, agent
 
+
 def compute_path_v1(my_maze, my_agent, caminho,visited):
 
-
-
-    """
-    Exercício:
-    Implemente um algoritmo de busca por profundidade, que encontre o caminho 
-    que o agente deve percorrer para encontrar a saída do labirinto.
-
-    Dicas:
-    - Use o atributo my_maze.maze_map para checar os movimentos possíveis.
-    - Use o atributo my_agent.position para saber a posição do agente.
-    - Verifique os formatos adequados para um caminho nesse post do
-    Towards Data Science, feito pelo autor do pacote:
-    https://towardsdatascience.com/a-python-module-for-maze-search-algorithms-64e7d1297c96
-    """
-
-    
     if(my_agent.position==my_maze._goal):
         return caminho
 
@@ -28,19 +13,16 @@ def compute_path_v1(my_maze, my_agent, caminho,visited):
             paths = my_maze.maze_map[my_agent.position]
             break
 
-
     print(f"POSIÇÃO ATUAL: {my_agent.position}, POSSÍVEIS CAMINHOS: {paths}, PERCORRIDO: {caminho}")
     visited.append(my_agent.position)
-
 
     #VERIFICA SE É POSSÍVEL IR PARA N E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
     if(paths['N']==1 and ((my_agent.position[0]-1, my_agent.position[1]) not in visited)) :
 
         nova_posicao = (my_agent.position[0]-1, my_agent.position[1])
 
-        my_agent.position = nova_posicao            
-        
-        
+        my_agent.position = nova_posicao
+
         compute_path_v1(my_maze,my_agent,caminho+'N',visited)
 
     #VERIFICA SE É POSSÍVEL IR PARA W E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA    
@@ -49,7 +31,6 @@ def compute_path_v1(my_maze, my_agent, caminho,visited):
         nova_posicao = (my_agent.position[0], my_agent.position[1]-1)
 
         my_agent.position = nova_posicao
-
 
         compute_path_v1(my_maze,my_agent,caminho+'W',visited)
 
@@ -69,25 +50,63 @@ def compute_path_v1(my_maze, my_agent, caminho,visited):
 
         my_agent.position = nova_posicao
 
-        compute_path_v1(my_maze,my_agent,caminho+'S',visited)   
-
-
+        compute_path_v1(my_maze,my_agent,caminho+'S',visited)
 
     return None
 
-def compute_path_v2(my_maze, my_agent, caminho, visited):
-    """
-    Exercício:
-    Implemente um algoritmo de busca por profundidade, que encontre o caminho 
-    que o agente deve percorrer para encontrar a saída do labirinto.
 
-    Dicas:
-    - Use o atributo my_maze.maze_map para checar os movimentos possíveis.
-    - Use o atributo my_agent.position para saber a posição do agente.
-    - Verifique os formatos adequados para um caminho nesse post do
-    Towards Data Science, feito pelo autor do pacote:
-    https://towardsdatascience.com/a-python-module-for-maze-search-algorithms-64e7d1297c96
-    """
+
+def compute_path_v2(my_maze, my_agent, caminho, visited):
+
+    if (my_agent.position == my_maze._goal):
+        return caminho
+
+    paths = {}
+    for i in my_maze.maze_map:
+
+        if i == my_agent.position:
+            paths = my_maze.maze_map[my_agent.position]
+            break
+
+    print(f"POSIÇÃO ATUAL: {my_agent.position}, POSSÍVEIS CAMINHOS: {paths}, PERCORRIDO: {caminho}")
+    visited.append(my_agent.position)
+
+    # VERIFICA SE É POSSÍVEL IR PARA N E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
+    if (paths['N'] == 1 and ((my_agent.position[0] - 1, my_agent.position[1]) not in visited)):
+        nova_posicao = (my_agent.position[0] - 1, my_agent.position[1])
+
+        my_agent.position = nova_posicao
+
+        caminho = compute_path_v2(my_maze, my_agent, caminho + 'N', visited)
+
+    # VERIFICA SE É POSSÍVEL IR PARA W E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
+    if (paths['W'] == 1 and ((my_agent.position[0], my_agent.position[1] - 1) not in visited)):
+        nova_posicao = (my_agent.position[0], my_agent.position[1] - 1)
+
+        my_agent.position = nova_posicao
+
+        caminho = compute_path_v2(my_maze, my_agent, caminho + 'W', visited)
+
+    # VERIFICA SE É POSSÍVEL IR PARA E E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
+    if (paths['E'] == 1 and ((my_agent.position[0], my_agent.position[1] + 1) not in visited)):
+        nova_posicao = (my_agent.position[0], my_agent.position[1] + 1)
+
+        my_agent.position = nova_posicao
+
+        caminho = compute_path_v2(my_maze, my_agent, caminho + 'E', visited)
+
+    # VERIFICA SE É POSSÍVEL IR PARA S E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
+    if (paths['S'] == 1 and ((my_agent.position[0] + 1, my_agent.position[1]) not in visited)):
+        nova_posicao = (my_agent.position[0] + 1, my_agent.position[1])
+
+        my_agent.position = nova_posicao
+
+        caminho = compute_path_v2(my_maze, my_agent, caminho + 'S', visited)
+
+    return caminho
+
+#VERSÃO CORRETA DA FUNÇÃO QUE ENCONTRA O CAMINHO
+def compute_path_v3(my_maze, my_agent, caminho, visited):
 
     if my_agent.position == my_maze._goal:
         return caminho
@@ -103,39 +122,59 @@ def compute_path_v2(my_maze, my_agent, caminho, visited):
 
     # VERIFICA SE É POSSÍVEL IR PARA N E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
     if paths['N'] == 1 and ((my_agent.position[0] - 1, my_agent.position[1]) not in visited):
-        nova_posicao = (my_agent.position[0] - 1, my_agent.position[1])
-        my_agent.position = nova_posicao            
-        resultado = compute_path_v2(my_maze, my_agent, caminho + 'N', visited)
-        if resultado is not None:
-            return resultado
-        my_agent.position = (my_agent.position[0] + 1, my_agent.position[1])  
 
-    # VERIFICA SE É POSSÍVEL IR PARA W E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA    
-    if paths['W'] == 1 and ((my_agent.position[0], my_agent.position[1] - 1) not in visited):
-        nova_posicao = (my_agent.position[0], my_agent.position[1] - 1)
+        nova_posicao = (my_agent.position[0] - 1, my_agent.position[1])
+
         my_agent.position = nova_posicao
-        resultado = compute_path_v2(my_maze, my_agent, caminho + 'W', visited)
+
+        resultado = compute_path_v3(my_maze, my_agent, caminho + 'N', visited)
+
         if resultado is not None:
             return resultado
-        my_agent.position = (my_agent.position[0], my_agent.position[1] + 1)  
+
+        my_agent.position = (my_agent.position[0] + 1, my_agent.position[1])
+
+    # VERIFICA SE É POSSÍVEL IR PARA W E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
+    if paths['W'] == 1 and ((my_agent.position[0], my_agent.position[1] - 1) not in visited):
+
+        nova_posicao = (my_agent.position[0], my_agent.position[1] - 1)
+
+        my_agent.position = nova_posicao
+
+        resultado = compute_path_v3(my_maze, my_agent, caminho + 'W', visited)
+
+        if resultado is not None:
+            return resultado
+
+        my_agent.position = (my_agent.position[0], my_agent.position[1] + 1)
 
     # VERIFICA SE É POSSÍVEL IR PARA E E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
     if paths['E'] == 1 and ((my_agent.position[0], my_agent.position[1] + 1) not in visited):
+
         nova_posicao = (my_agent.position[0], my_agent.position[1] + 1)
+
         my_agent.position = nova_posicao
-        resultado = compute_path_v2(my_maze, my_agent, caminho + 'E', visited)
+
+        resultado = compute_path_v3(my_maze, my_agent, caminho + 'E', visited)
+
         if resultado is not None:
             return resultado
-        my_agent.position = (my_agent.position[0], my_agent.position[1] - 1)  
+
+        my_agent.position = (my_agent.position[0], my_agent.position[1] - 1)
 
     # VERIFICA SE É POSSÍVEL IR PARA S E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
     if paths['S'] == 1 and ((my_agent.position[0] + 1, my_agent.position[1]) not in visited):
+
         nova_posicao = (my_agent.position[0] + 1, my_agent.position[1])
+
         my_agent.position = nova_posicao
-        resultado = compute_path_v2(my_maze, my_agent, caminho + 'S', visited)
+
+        resultado = compute_path_v3(my_maze, my_agent, caminho + 'S', visited)
+
         if resultado is not None:
             return resultado
-        my_agent.position = (my_agent.position[0] - 1, my_agent.position[1])  
+
+        my_agent.position = (my_agent.position[0] - 1, my_agent.position[1])
 
     return None
 
@@ -145,7 +184,7 @@ if __name__ == "__main__":
         my_maze = maze(5, 5)
         # lê labirinto do exercício
         my_maze.CreateMaze(theme=COLOR.light)
-        
+
         # cria agente
         my_agent = agent(my_maze, 5, 5, shape="arrow", filled=True, footprints=True)
         #print(my_maze._goal)
