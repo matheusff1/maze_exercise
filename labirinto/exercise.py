@@ -101,8 +101,12 @@ def compute_path_v2(my_maze, my_agent, caminho, visited):
 
 #VERSÃO CORRETA DA FUNÇÃO QUE ENCONTRA O CAMINHO
 def compute_path_v3(my_maze, my_agent):
+    if my_maze is None or my_agent is None:
+        print("Erro: Maze ou Agent é nulo.")
+        return None
 
-    visited=[]
+    visited = []
+
     def compute_path(caminho, visited):
         if my_agent.position == my_maze._goal:
             return caminho
@@ -118,9 +122,7 @@ def compute_path_v3(my_maze, my_agent):
 
         # VERIFICA SE É POSSÍVEL IR PARA N E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
         if paths['N'] == 1 and ((my_agent.position[0] - 1, my_agent.position[1]) not in visited):
-
             nova_posicao = (my_agent.position[0] - 1, my_agent.position[1])
-
             my_agent.position = nova_posicao
 
             resultado = compute_path(caminho + 'N', visited)
@@ -129,13 +131,11 @@ def compute_path_v3(my_maze, my_agent):
                 return resultado
 
             my_agent.position = (my_agent.position[0] + 1, my_agent.position[1])
-            caminho=caminho[:-1]
+            caminho = caminho[:-1]
 
         # VERIFICA SE É POSSÍVEL IR PARA W E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
         if paths['W'] == 1 and ((my_agent.position[0], my_agent.position[1] - 1) not in visited):
-
             nova_posicao = (my_agent.position[0], my_agent.position[1] - 1)
-
             my_agent.position = nova_posicao
 
             resultado = compute_path(caminho + 'W', visited)
@@ -148,9 +148,7 @@ def compute_path_v3(my_maze, my_agent):
 
         # VERIFICA SE É POSSÍVEL IR PARA E E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
         if paths['E'] == 1 and ((my_agent.position[0], my_agent.position[1] + 1) not in visited):
-
             nova_posicao = (my_agent.position[0], my_agent.position[1] + 1)
-
             my_agent.position = nova_posicao
 
             resultado = compute_path(caminho + 'E', visited)
@@ -163,9 +161,7 @@ def compute_path_v3(my_maze, my_agent):
 
         # VERIFICA SE É POSSÍVEL IR PARA S E SE A POSSÍVEL POSIÇÃO AINDA NÃO FOI VISITADA
         if paths['S'] == 1 and ((my_agent.position[0] + 1, my_agent.position[1]) not in visited):
-
             nova_posicao = (my_agent.position[0] + 1, my_agent.position[1])
-
             my_agent.position = nova_posicao
 
             resultado = compute_path(caminho + 'S', visited)
@@ -178,7 +174,7 @@ def compute_path_v3(my_maze, my_agent):
 
         return None
 
-    return compute_path("",visited)
+    return compute_path("", visited)
 
 
 if __name__ == "__main__":
